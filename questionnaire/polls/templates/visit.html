@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .mui-row>div{
+        text-align: center;
+    }
+
+</style>
+<div class="mui-content">
+    <div class="mui-card">
+        <div class="mui-card-content">
+            <div class="mui-card-content-inner">
+                <h4>
+                    首先感谢您能抽出宝贵的时间来参与此次调查问卷！
+                </h4>
+            </div>
+        </div>
+    </div>
+
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mui-card">
+            <div class="mui-card-header">您的姓名</div>
+            <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+                    <input type="text" name="name"  value="{{ from_data.name}}" placeholder="请输入姓名">
+                </div>
+            </div>
+        </div>
+
+        {% for item in questions_config %}
+        <div class="mui-card">
+            <div class="mui-card-header">{{ item }}</div>
+            <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+                    {% load template_extras %}
+                    
+                    <textarea 
+                    id="text_id_{{ forloop.counter }}" 
+                    name="text_name_{{ forloop.counter  }}"
+                    rows="5" placeholder="请输入">{{ from_data|viist_dictget_filter:forloop.counter }}</textarea>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <input type="submit" class="mui-btn mui-btn-primary submit_btn" value="提交">
+    </form>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .mui-row>div{
+        text-align: center;
+    }
+
+</style>
+<div class="mui-content">
+
+    <form class="mui-input-group" method="POST">
+        {% csrf_token %}
+        <div class="mui-input-row">
+            <label>用户名</label>
+            <input type="text" name="username" placeholder="用户名">
+        </div>
+        <div class="mui-input-row">
+            <label>密码</label>
+            <input type="password" name="password" class="mui-input-clear" placeholder="密码">
+        </div>
+        <div class="mui-button-row">
+            <button class="mui-btn mui-btn-primary" type="submit">登录</button>&nbsp;&nbsp;
+        </div>
+    </form>
+
+
+</div>
+
+{% endblock %}

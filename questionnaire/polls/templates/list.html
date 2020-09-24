@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .mui-row>div {
+        text-align: center;
+    }
+    .mui-table-view-cell>a:not(.mui-btn){
+        width: 50%;
+        float: left;
+    }
+</style>
+<div class="mui-content">
+
+    <div class="mui-content-padded">
+        <ul class="mui-table-view">
+            {% for item in dateList%}
+            <li class="mui-table-view-cell">
+                <div class="mui-row">
+                    <div class="mui-col-sm-2 mui-col-xs-2">
+                         {{ item.name }} 
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4">
+                        <a href="{% url 'management' %}?id={{ item.id }}">
+                           2020年嗨鹿人才盘点问卷—管理层
+                        </a>
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4">
+                        <a href="{% url 'visit' %}?id={{ item.id }}">
+                           2020年嗨鹿人才盘点访谈表
+                        </a>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if dateList.paginator.num_pages > 1 %}
+    <div class="mui-content-padded">
+
+        <ul class="mui-pagination mui-pagination-sm">
+            {% if 1 not in page_range %}
+                <li class="">
+                    <a href="?page=1">
+                        »
+                    </a>
+                </li>
+            {% endif %}
+                
+                {% for page in page_range %}
+                {% if page == dateList.number %}
+                    <li class="mui-active">
+                        <a href="#">
+                            {{ page }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="">
+                        <a href="?page={{ page }}">
+                            {{ page }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if dateList.paginator.num_pages not in page_range %}
+            <li class="mui-next">
+                <a href="?page={{ dateList.paginator.num_pages }}">
+                    »
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+
+
+</div>
+
+{% endblock %}

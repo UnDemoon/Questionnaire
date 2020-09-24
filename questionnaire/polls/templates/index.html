@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .mui-row>div{
+        text-align: center;
+    }
+    .mui-col-sm-4, .mui-col-xs-4{
+        text-align: left!important;
+        line-height: 50px;
+    }
+    .mui-col-sm-4 h4,.mui-col-xs-4 h4{
+        line-height: 1.8;
+    }
+</style>
+<div class="mui-content">
+    <div class="mui-card">
+        <div class="mui-card-content">
+            <div class="mui-card-content-inner">
+                <p>
+                    为了更好的帮助业务管理者能力发展，识别改进重点，从而提升个人和公司的整体技能和绩效水平，现诚挚邀请您一起参与本次360度测评，该问卷的设计基于业务管理者的胜任力素质模型，请仔细阅读每个问题，根据您对被测评人在工作中实际情况的了解进行打分。
+                    评估时请注意以下事项：
+                    <br>1、反馈必须是客观、真实、完整的，避免夸大被评价者的优势或粉饰其不足；
+                    <br>2、本次测评信息及资料内容将严格保密，请放心如实作答，也请不要与他人进行沟通、交流。  
+                    <br>请您于9月29日（周二）前完成问卷作答，非常感谢您的参与，您的意见对我们非常重要！
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <form method="post">
+        {% csrf_token %}
+    
+        <div class="mui-card">
+            <div class="mui-card-header">您的姓名</div>
+            <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+                    <input type="text" name="name" value="{{ from_data.name }}" placeholder="请输入姓名">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mui-card">
+            <div class="mui-card-header">您是被测评人的</div>
+            <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+                    <select name="level" class="mui-btn" id={{from_data.level}}>
+                        <option value="1" {% ifequal from_data.level '1' %} selected {% endifequal  %}>上级</option>
+                        <option value="2" {% ifequal from_data.level '2' %} selected {% endifequal  %}>人事</option>
+                        <option value="3" {% ifequal from_data.level '3' %} selected {% endifequal  %}>平级</option>
+                        <option value="4" {% ifequal from_data.level '4' %} selected {% endifequal  %}>下级</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        {% for item in questions_config %}
+        <div class="mui-card">
+            <div class="mui-card-header">{{ item.item_title }}</div>
+            <div class="mui-card-content">
+                <div class="mui-card-content-inner">
+
+                    <div class="mui-row">
+                        <div class="mui-col-sm-1 mui-col-xs-1"></div>
+                        <div class="mui-col-sm-4 mui-col-xs-4">
+                        </div>
+                        <div class="mui-col-sm-1 mui-col-xs-1">
+                            完全不符合（1分）
+                        </div>
+                        <div class="mui-col-sm-1 mui-col-xs-1">
+                            有些符合（1分）
+                        </div>
+                        <div class="mui-col-sm-1 mui-col-xs-1">
+                            一般符合（3分）
+                        </div>
+                        <div class="mui-col-sm-1 mui-col-xs-1">
+                            基本符合（4分）
+                        </div>
+                        <div class="mui-col-sm-1 mui-col-xs-1">
+                            完全符合（5分）
+                        </div>
+                    </div>
+
+                    {% for question in item.item_op %}
+                        {% load template_extras %}
+                        {% with forloop.parentloop.counter|keys_make_filter:forloop.counter as temp_id %}
+                        <div class="mui-row">
+                            <div class="mui-col-sm-1 mui-col-xs-1"></div>
+                            <div class="mui-col-sm-4 mui-col-xs-4">
+                                <h4>{{ question }}</h4>
+                            </div>
+                            
+                            <div class="mui-col-sm-1 mui-col-xs-1">
+                                <input 
+                                {% ifequal from_data|dictget_filter:temp_id '1' %} checked {% endifequal  %}
+                                name="radio_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                                value="1" 
+                                type="radio">
+                            </div>
+                            <div class="mui-col-sm-1 mui-col-xs-1">
+                                <input 
+                                {% ifequal from_data|dictget_filter:temp_id '2' %} checked {% endifequal  %}
+                                name="radio_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="2" type="radio">
+                            </div>
+                            <div class="mui-col-sm-1 mui-col-xs-1">
+                                <input 
+                                {% ifequal from_data|dictget_filter:temp_id '3' %} checked {% endifequal  %}
+                                name="radio_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="3" type="radio">
+                            </div>
+                            <div class="mui-col-sm-1 mui-col-xs-1">
+                                <input
+                                {% ifequal from_data|dictget_filter:temp_id '4' %} checked {% endifequal  %}
+                                name="radio_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="4" type="radio">
+                            </div>
+                            <div class="mui-col-sm-1 mui-col-xs-1">
+                                <input 
+                                {% ifequal from_data|dictget_filter:temp_id '5' %} checked {% endifequal  %}
+                                name="radio_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="5" type="radio">
+                            </div>
+                        </div>
+                        {% endwith %}
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <input type="submit" class="mui-btn mui-btn-primary submit_btn" value="提交">
+    </form>
+</div>
+
+{% endblock %}
